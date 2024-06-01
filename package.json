@@ -1,6 +1,7 @@
 {
   "name": "grades-vite-express",
   "version": "1.0.0",
+  "type": "module",
   "description": "Simple grades web application with crud actions, using node, express and sqlite for backend, with Vite-react for frontend.",
   "main": "index.js",
   "scripts": {
