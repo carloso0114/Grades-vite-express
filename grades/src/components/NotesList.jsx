@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import AddNote from './AddNote';
 
 const NotesList = () => {
   const [notes, setNotes] = useState([]);
@@ -26,10 +27,11 @@ const NotesList = () => {
       <ul>
         {notes.map(note => (
           <li key={note.id}>
-            {note.estudiante } - {note.materia}: {note.notaFinal + " "} -
+            {note.estudiante} - {note.materia}: {note.notaFinal + " "}
           </li>
         ))}
       </ul>
+      <AddNote fetchNotes={fetchNotes} />
     </div>
   );
 };
