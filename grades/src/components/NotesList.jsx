@@ -21,6 +21,22 @@ const NotesList = () => {
     }
   };
 
+  const deleteNote = async (id) => {
+    try {
+      const response = await fetch(`/api/notas/${id}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error deleting note');
+      }
+  
+      await fetchNotes(); // Refresh the notes list after deletion
+    } catch (error) {
+      console.error('Error deleting note:', error);
+    }
+  };
+
   return (
     <div>
       <h1>Student Notes</h1>
@@ -28,6 +44,8 @@ const NotesList = () => {
         {notes.map(note => (
           <li key={note.id}>
             {note.estudiante} - {note.materia}: {note.notaFinal + " "}
+            {" "}<button onClick={() => deleteNote(note.id)}>Delete</button>
+
           </li>
         ))}
       </ul>
