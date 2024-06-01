@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AddNote = ({fetchNotes}) => {
+const AddNote = ({ fetchNotes, editingNote, setEditingNote }) => {
   const [materia, setMateria] = useState('');
   const [estudiante, setEstudiante] = useState('');
   const [nota1, setNota1] = useState('');
@@ -10,20 +10,59 @@ const AddNote = ({fetchNotes}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const noteData = { materia, estudiante, nota1, nota2, nota3 };
-    fetch('/api/notas', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(noteData),
-    })
-      .then(response => response.json())
-      .then(() => {
-        fetchNotes(); // Refresh the notes list
-      })
-      .catch(error => console.error('Error adding note:', error));
 
+    if (editingNote) {
+      fetch(`/api/notas/${editingNote.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(noteData),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error updating note');
+          }
+          return response.json();
+        })
+        .then(() => {
+          fetchNotes(); // Refresh the notes list
+          setEditingNote(null); // Clear the editing note state
+        })
+        .catch(error => console.error('Error updating note:', error));
+    } else {
+      fetch('/api/notas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(noteData),
+      })
+        .then(response => response.json())
+        .then(() => {
+          fetchNotes(); // Refresh the notes list
+        })
+        .catch(error => console.error('Error adding note:', error));
+    }
   };
+
+  useEffect(() => {
+    if (editingNote) {
+      console.log(editingNote)
+      setMateria(editingNote.materia);
+      setEstudiante(editingNote.estudiante);
+      setNota1(editingNote.nota1);
+      setNota2(editingNote.nota2);
+      setNota3(editingNote.nota3);
+    } else {
+      // Clear the form when not editing
+      setMateria('');
+      setEstudiante('');
+      setNota1('');
+      setNota2('');
+      setNota3('');
+    }
+  }, [editingNote]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -102,7 +141,7 @@ const AddNote = ({fetchNotes}) => {
           />
         </label>
       </div>
-      <button type="submit">Add Note</button>
+      <button type="submit">{editingNote ? 'Update Note' : 'Add Note'}</button>
     </form>
   );
 };

@@ -3,6 +3,7 @@ import AddNote from './AddNote';
 
 const NotesList = () => {
   const [notes, setNotes] = useState([]);
+  const [editingNote, setEditingNote] = useState(null);
 
   useEffect(() => {
     fetchNotes()
@@ -37,19 +38,23 @@ const NotesList = () => {
     }
   };
 
+  const handleEdit = (note) => {
+    setEditingNote(note);
+  };
+
   return (
     <div>
       <h1>Student Notes</h1>
       <ul>
         {notes.map(note => (
           <li key={note.id}>
-            {note.estudiante} - {note.materia}: {note.notaFinal + " "}
+            {note.estudiante} - {note.materia}: {note.notaFinal + " "}-
+            {" "}<button onClick={() => handleEdit(note)}>Modify</button>
             {" "}<button onClick={() => deleteNote(note.id)}>Delete</button>
-
           </li>
         ))}
       </ul>
-      <AddNote fetchNotes={fetchNotes} />
+      <AddNote fetchNotes={fetchNotes} editingNote={editingNote} setEditingNote={setEditingNote} />
     </div>
   );
 };

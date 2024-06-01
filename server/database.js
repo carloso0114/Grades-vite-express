@@ -16,9 +16,9 @@ db.serialize(() => {
 
   // Insertar datos de ejemplo
   const stmt = db.prepare("INSERT INTO notas (materia, estudiante, nota1, nota2, nota3) VALUES (?, ?, ?, ?, ?)");
-  stmt.run("Matemáticas", "John Doe", 9.50, 8.75, 9.00);
-  stmt.run("Historia", "Jane Smith", 7.00, 6.50, 8.00);
-  stmt.run("Ciencias", "Alice Johnson", 8.25, 8.50, 9.00);
+  stmt.run("Mathematics", "John Doe", 9.50, 8.75, 9.00);
+  stmt.run("History", "Jane Smith", 7.00, 6.50, 8.00);
+  stmt.run("Art", "Michael Johnson", 8.25, 8.50, 9.00);
   stmt.finalize();
 });
 
